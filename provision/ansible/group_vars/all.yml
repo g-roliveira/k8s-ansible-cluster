@@ -1,0 +1,48 @@
+###################################################
+# Maquinas Virtuais Cluster
+
+k8s_machines:
+- name: k8s-master
+  box: trombik/ansible-ubuntu-20.04-amd64
+  hostname: k8s-master
+  ipaddress: 172.21.1.100
+  memory: 3584
+  cpus: 4
+  provision: provision/ansible/k8s-master.yaml
+  vbox_group: "/Kubernetes Labs"
+- name: k8s-node1
+  box: trombik/ansible-ubuntu-20.04-amd64
+  hostname: k8s-node1
+  ipaddress: 172.21.1.101
+  memory: 2048
+  cpus: 4
+  provision: provision/ansible/k8s-node1.yaml
+  vbox_group: "/Kubernetes Labs"
+- name: k8s-node2
+  box: trombik/ansible-ubuntu-20.04-amd64
+  hostname: k8s-node2
+  ipaddress: 172.21.1.102
+  memory: 2048
+  cpus: 4
+  provision: provision/ansible/k8s-node2.yaml
+  vbox_group: "/Kubernetes Labs"
+- name: k8s-nfs
+  box: trombik/ansible-ubuntu-20.04-amd64
+  hostname: k8s-nfs
+  ipaddress: 172.21.1.103
+  subnet: "/24"
+  memory: 1024
+  cpus: 2
+  provision: provision/ansible/k8s-nfs.yaml
+  vbox_group: "/Kubernetes Labs"
+
+###################################################
+# Configurações Kubernetes
+calico_version: "v3.26.0"
+ansible_user_home: "/home/vagrant"
+pod_network_cidr: "10.244.0.0/16"
+metallb_version: "v0.13.10"
+metallb_range: "172.16.1.201-172.16.1.250"
+###################################################
+# Configurações NFS Server
+subnet_vm: "172.21.1.0/24"

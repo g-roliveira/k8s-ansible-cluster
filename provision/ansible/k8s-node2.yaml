@@ -1,0 +1,6 @@
+- name: Instalação Nodes Kubernetes
+  hosts: k8s-node2
+  become: true
+  roles:
+  - environment
+  - nodes

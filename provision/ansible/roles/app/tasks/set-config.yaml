@@ -1,0 +1,16 @@
+- name: Cria o diretório .kube para o usuário vagrant
+  file:
+    path: "/root/.kube"
+    state: directory
+    mode: '0755'
+
+- name: Configura o kubeconfig para o usuario vagrant
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/root/.kube/config"
+    remote_src: yes
+
+- name: Definir permissao de acesso ao arquivo config
+  file:
+    path: "/root/.kube/config"
+    mode: '0644'

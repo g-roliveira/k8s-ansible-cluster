@@ -1,0 +1,21 @@
+- name: Instalando o NFS Server
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - nfs-kernel-server
+    - nfs-common
+    - nano
+
+- name: Mudando TimeZone Para São Paulo Brasil
+  timezone:
+    name: America/Sao_Paulo
+
+- name: Garantindo /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ipaddress }} {{ item.hostname }}"
+  loop: "{{ k8s_machines }}"
+

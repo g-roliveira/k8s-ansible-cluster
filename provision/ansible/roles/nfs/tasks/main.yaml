@@ -1,0 +1,26 @@
+- name: Instala Pacote Necessarios
+  include_tasks: install_packages.yaml
+
+- name: Criando diretório /opt/storage
+  file:
+    path: /opt/storage
+    state: directory
+    mode: '0775'
+
+- name: Criando diretório /opt/registry
+  file:
+    path: /opt/registry
+    state: directory
+    mode: '0775'
+
+- name: Criando o arquivo exports
+  lineinfile:
+    path: /etc/exports
+    line: "/opt/{{ item }} {{ subnet_vm }}(rw,no_root_squash,no_subtree_check)"
+  loop:
+  - storage
+  - registry
+  notify: reiniciar nfs
+
+
+

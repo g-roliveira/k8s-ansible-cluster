@@ -1,0 +1,49 @@
+- name: Check if kubectl is installed
+  command: kubectl
+  register: kubectl_check
+  ignore_errors: true
+
+- name: Install kubectl if not installed
+  block:
+  - name: Get latest kubectl version
+    command: curl -L -s https://dl.k8s.io/release/stable.txt
+    register: latest_kubectl
+    changed_when: false
+
+  - name: Download kubectl
+    get_url:
+      url: "https://dl.k8s.io/release/{{ latest_kubectl.stdout }}/bin/linux/amd64/kubectl"
+      dest: "/usr/local/bin/kubectl"
+      mode: '0755'
+
+  - name: Validate the kubectl binary
+    command: echo "$(curl -LO https://dl.k8s.io/{{ latest_kubectl.stdout }}/bin/linux/amd64/kubectl.sha256)  kubectl" | sha256sum --check
+
+  when: kubectl_check.failed
+
+- name: Install bash-completion if not present
+  package:
+    name: bash-completion
+    state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install bash-completion if not present
+  package:
+    name: bash-completion
+    state: present
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Add kubectl auto-completion to bash shell for all users
+  shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+  args:
+    executable: /bin/bash
+
+- name: Add kubectl alias to .bashrc
+  lineinfile:
+    path: "{{ ansible_user_home }}/.bashrc"
+    line: 'alias k=kubectl'
+
+- name: Enable the alias for auto-completion
+  lineinfile:
+    path: "{{ ansible_user_home }}/.bashrc"
+    line: 'complete -o default -F __start_kubectl k'

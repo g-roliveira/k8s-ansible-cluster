@@ -1,0 +1,4 @@
+- name: reiniciar nfs
+  systemd:
+    name: nfs-kernel-server
+    state: restarted

@@ -1,0 +1,36 @@
+- name: Instalação Masters Kubernetes
+  hosts: k8s-master
+  become: true
+  roles:
+  - environment
+  - master
+
+# - name: Instalação Nodes Kubernetes
+#   hosts: k8s-node1
+#   order: sorted
+#   become: true
+#   roles:
+#   - environment
+#   - nodes
+
+# - name: Instalação Nodes Kubernetes
+#   hosts: k8s-node2
+#   order: sorted
+#   become: true
+#   roles:
+#   - environment
+#   - nodes
+
+# - name: Instalação NFS Server
+#   hosts: k8s-nfs
+#   order: sorted
+#   become: true
+#   roles:
+#   - nfs
+
+# - name: Instalação MetalLB Kubernetes
+#   hosts: k8s-master
+#   order: sorted
+#   become: true
+#   roles:
+#   - app

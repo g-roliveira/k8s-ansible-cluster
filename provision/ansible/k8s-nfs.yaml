@@ -1,0 +1,13 @@
+- name: Instalação NFS Server
+  hosts: k8s-nfs
+  become: true
+  roles:
+  - nfs
+
+- name: Executa a role App em k8s-master após todos os outros playbooks
+  hosts: k8s-master
+  become: true
+  tasks:
+    - name: Include role app
+      include_role:
+        name: app
